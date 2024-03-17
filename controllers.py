@@ -1,7 +1,7 @@
 # controllers.py
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 def fetch_documents(url):  # Add URL parameter
     """
@@ -46,3 +46,21 @@ def get_sitemap(base_url):  # Add base_url parameter
         print(f"Error fetching sitemap: {e}")
         return {"error": "Failed to fetch sitemap"}
 
+def fetch_internal_links(url):
+    """
+    Fetches all internal links from a given documentation URL.
+    """
+    try:
+        response = requests.get(url)
+        domain = urlparse(url).netloc
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            internal_links = set()
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if href.startswith('/') or urlparse(href).netloc == domain:
+                    internal_links.add(urljoin(url, href))
+            return list(internal_links)
+    except Exception as e:
+        print(f"Error fetching internal links from {url}: {e}")
+        return []

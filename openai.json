@@ -1,216 +1,144 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "LangchainDocsFetcher API",
-    "description": "Enhanced API for fetching Langchain documentation, navigating the site map, and querying documentation content in a conversational manner.",
-    "version": "2.0"
-  },
-  "servers": [
-    {
-      "url": "https://langchainapi-lv8z.onrender.com",
-      "description": "Development server"
-    }
-  ],
-  "paths": {
-    "/api/v1/fetch_docs": {
-      "get": {
-        "summary": "Fetch documents from a specified URL",
-        "operationId": "fetchDocs",
-        "parameters": [
-          {
-            "name": "url",
-            "in": "query",
-            "required": true,
-            "description": "The URL from which to fetch documents",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "content": {
-                      "type": "string",
-                      "description": "The content of the document"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Document not found"
-          }
-        }
-      }
+    "openapi": "3.1.0",
+    "info": {
+      "title": "LangchainDocsFetcher API",
+      "description": "Enhanced API for fetching Langchain documentation, navigating the site map, and querying documentation content in a conversational manner.",
+      "version": "2.0"
     },
-    "/api/v1/get_sitemap": {
-      "get": {
-        "summary": "Get the documentation site map for a specified URL",
-        "operationId": "getSitemap",
-        "parameters": [
-          {
-            "name": "url",
-            "in": "query",
-            "required": true,
-            "description": "The base URL for which to get the documentation sitemap. The function filters for URLs containing '/docs' to ensure only documentation-related links are returned.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "sitemap": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "url": {
-                            "type": "string",
-                            "description": "The URL of the documentation page"
-                          },
-                          "title": {
-                            "type": "string",
-                            "description": "The title of the documentation page. This field is optional and may not be present if the title could not be determined."
-                          }
-                        }
-                      },
-                      "description": "A list of documentation-related URLs. Each URL is verified to ensure it points to actual documentation content."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Base URL not found or no documentation links available"
-          }
-        }
+    "servers": [
+      {
+        "url": "https://langchainapi-lv8z.onrender.com",
+        "description": "Development server"
       }
-    },
-    "/api/v1/query_docs": {
-      "post": {
-        "summary": "Query the documentation content",
-        "operationId": "queryDocs",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
+    ],
+    "paths": {
+      "/api/v1/fetch_docs": {
+        "get": {
+          "summary": "Fetch documents from a specified URL",
+          "operationId": "fetchDocs",
+          "parameters": [
+            {
+              "name": "url",
+              "in": "query",
+              "required": true,
+              "description": "The URL from which to fetch documents",
               "schema": {
-                "type": "object",
-                "properties": {
-                  "query": {
-                    "type": "string",
-                    "description": "The user's query to find relevant documentation content"
-                  }
-                }
+                "type": "string"
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Query processed successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "title": {
-                            "type": "string",
-                            "description": "The title of the documentation section"
-                          },
-                          "snippet": {
-                            "type": "string",
-                            "description": "A snippet of the relevant documentation content"
-                          },
-                          "url": {
-                            "type": "string",
-                            "description": "Direct URL to the relevant documentation section"
-                          }
-                        }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "content": {
+                        "type": "string",
+                        "description": "The content of the document"
                       }
                     }
                   }
                 }
               }
+            },
+            "404": {
+              "description": "Document not found"
+            }
+          }
+        }
+      },
+      "/api/v1/get_sitemap": {
+        "get": {
+          "summary": "Get the documentation site map for a specified URL",
+          "operationId": "getSitemap",
+          "parameters": [
+            {
+              "name": "url",
+              "in": "query",
+              "required": true,
+              "description": "The base URL for which to get the documentation sitemap. The function filters for URLs containing '/docs' to ensure only documentation-related links are returned.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "sitemap": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "description": "The URL of the documentation page"
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "The title of the documentation page. This field is optional and may not be present if the title could not be determined."
+                            }
+                          }
+                        },
+                        "description": "A list of documentation-related URLs. Each URL is verified to ensure it points to actual documentation content."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Base URL not found or no documentation links available"
             }
           }
         }
       }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-API-KEY"
+    },
+    "components": {
+      "securitySchemes": {
+        "ApiKeyAuth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "X-API-KEY"
+        }
+      },
+      "schemas": {
+        "DocumentContent": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The content of the document."
+            }
+          }
+        },
+        "SitemapItem": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL of the documentation page."
+            },
+            "title": {
+              "type": "string",
+              "description": "The title of the documentation page."
+            }
+          }
+        }
       }
     },
-    "schemas": {
-      "DocumentContent": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "string",
-            "description": "The content of the document."
-          }
-        }
-      },
-      "SitemapItem": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "The URL of the documentation page."
-          },
-          "title": {
-            "type": "string",
-            "description": "The title of the documentation page."
-          }
-        }
-      },
-      "QueryResult": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "The title of the documentation section."
-          },
-          "snippet": {
-            "type": "string",
-            "description": "A snippet of the relevant documentation content."
-          },
-          "url": {
-            "type": "string",
-            "description": "Direct URL to the relevant documentation section."
-          }
-        }
+    "security": [
+      {
+        "ApiKeyAuth": []
       }
-    }
-  },
-  "security": [
-    {
-      "ApiKeyAuth": []
-    }
-  ]
-}
+    ]
+  }
+  

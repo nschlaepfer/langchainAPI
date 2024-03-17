@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import json
 import logging
-from controllers import fetch_documents, get_sitemap
+from controllers import fetch_documents, get_sitemap, fetch_all_links
 import os
 
 # Load configuration
@@ -40,6 +40,17 @@ def api_get_sitemap():
         return jsonify({"error": "URL parameter is required"}), 400
     sitemap = get_sitemap(base_url)
     return jsonify(sitemap)
+
+@app.route('/api/v1/fetch_all_links', methods=['GET'])
+def api_fetch_all_links():
+    """
+    Endpoint to fetch all links from the specified URL.
+    """
+    url = request.args.get('url')
+    if not url:
+        return jsonify({"error": "URL parameter is required"}), 400
+    links = fetch_all_links(url)
+    return jsonify({"links": links})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))  # Adjust host and port as needed
