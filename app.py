@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import json
 import logging
-from controllers import fetch_documents, get_sitemap, fetch_all_links
+from controllers import fetch_documents, get_sitemap, fetch_all_links_from_docs
 import os
 
 # Load configuration
@@ -51,7 +51,7 @@ def api_fetch_all_links():
         logger.error("URL parameter is required")
         return jsonify({"error": "URL parameter is required"}), 400
     try:
-        links = fetch_all_links(url)
+        links = fetch_all_links_from_docs(url)  # Updated function name
         if links:
             return jsonify({"links": links}), 200
         else:
