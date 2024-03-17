@@ -20,8 +20,11 @@ def fetch_docs():
     """
     Endpoint to fetch documents from the specified URLs.
     """
+    url = request.args.get('url')  # Get URL from query parameters
+    if not url:
+        return jsonify({"error": "URL parameter is required"}), 400
     try:
-        docs = fetch_documents()
+        docs = fetch_documents(url)
         return jsonify(docs), 200
     except Exception as e:
         logger.error(f"Error fetching documents: {e}")
@@ -32,7 +35,10 @@ def api_get_sitemap():
     """
     Endpoint to get the sitemap of the documentation URLs.
     """
-    sitemap = get_sitemap()
+    base_url = request.args.get('url')  # Get base URL from query parameters
+    if not base_url:
+        return jsonify({"error": "URL parameter is required"}), 400
+    sitemap = get_sitemap(base_url)
     return jsonify(sitemap)
 
 if __name__ == '__main__':

@@ -9,13 +9,13 @@ servers:
 paths:
   /api/v1/fetch_docs:
     get:
-      summary: Fetch a specific document
+      summary: Fetch documents from a specified URL
       operationId: fetchDocs
       parameters:
-        - name: document_id
+        - name: url
           in: query
           required: true
-          description: The ID of the document to fetch
+          description: The URL from which to fetch documents
           schema:
             type: string
       responses:
@@ -33,8 +33,15 @@ paths:
           description: Document not found
   /api/v1/get_sitemap:
     get:
-      summary: Get the site map
+      summary: Get the site map for a specified URL
       operationId: getSitemap
+      parameters:
+        - name: url
+          in: query
+          required: true
+          description: The base URL for which to get the sitemap
+          schema:
+            type: string
       responses:
         '200':
           description: Successful operation

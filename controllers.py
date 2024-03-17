@@ -3,13 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-def fetch_documents():
+def fetch_documents(url):  # Add URL parameter
     """
     Controller to fetch documents from the specified URLs.
     This function will be called by the fetch_docs view function.
     """
     # Example URL to start with, this should be dynamic or configured
-    urls = ["https://python.langchain.com/docs/get_started/introduction"]
+    urls = [url]  # Use the provided URL
     documents = []
 
     for url in urls:
@@ -27,8 +27,8 @@ def fetch_documents():
 
     return documents
 
-def get_sitemap():
-    base_url = "https://python.langchain.com/docs/get_started/introduction"
+def get_sitemap(base_url):  # Add base_url parameter
+    # Use the provided base_url instead of a hardcoded one
     try:
         response = requests.get(base_url)
         if response.status_code == 200:
