@@ -64,3 +64,21 @@ def fetch_internal_links(url):
     except Exception as e:
         print(f"Error fetching internal links from {url}: {e}")
         return []
+def fetch_all_links(url):
+    """
+    Fetches all links from the given URL.
+    """
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            links = set()
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                # Create an absolute URL and add to the set
+                absolute_url = urljoin(url, href)
+                links.add(absolute_url)
+            return list(links)
+    except Exception as e:
+        print(f"Error fetching all links from {url}: {e}")
+        return []
