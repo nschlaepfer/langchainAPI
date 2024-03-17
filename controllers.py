@@ -38,8 +38,9 @@ def get_sitemap(base_url):  # Add base_url parameter
                 href = link['href']
                 # Create an absolute URL
                 absolute_url = urljoin(base_url, href)
-                # Add filtering conditions here if necessary
-                links.add(absolute_url)
+                # Filter for URLs containing '/docs'
+                if '/docs' in absolute_url:
+                    links.add(absolute_url)
             return {"urls": list(links)}
     except Exception as e:
         print(f"Error fetching sitemap: {e}")
