@@ -48,9 +48,18 @@ def api_fetch_all_links():
     """
     url = request.args.get('url')
     if not url:
+        logger.error("URL parameter is required")
         return jsonify({"error": "URL parameter is required"}), 400
-    links = fetch_all_links(url)
-    return jsonify({"links": links})
+    try:
+        links = fetch_all_links(url)
+        if links:
+            return jsonify({"links": links}), 200
+        else:
+            logger.error(f"No links found at the specified URL: {url}")
+            return jsonify({"error": "No links found at the specified URL"}), 404
+    except Exception as e:
+        logger.error(f"Error fetching all links from {url}: {e}")
+        return jsonify({"error": "Failed to fetch links"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))  # Adjust host and port as needed

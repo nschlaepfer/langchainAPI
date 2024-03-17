@@ -46,39 +46,38 @@ def get_sitemap(base_url):  # Add base_url parameter
         print(f"Error fetching sitemap: {e}")
         return {"error": "Failed to fetch sitemap"}
 
-def fetch_internal_links(url):
+def fetch_all_links_from_docs(base_url):
     """
-    Fetches all internal links from a given documentation URL.
-    """
-    try:
-        response = requests.get(url)
-        domain = urlparse(url).netloc
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
-            internal_links = set()
-            for link in soup.find_all('a', href=True):
-                href = link['href']
-                if href.startswith('/') or urlparse(href).netloc == domain:
-                    internal_links.add(urljoin(url, href))
-            return list(internal_links)
-    except Exception as e:
-        print(f"Error fetching internal links from {url}: {e}")
-        return []
-def fetch_all_links(url):
-    """
-    Fetches all links from the given URL.
+    Fetches all links from the documentation route of a given website.
     """
     try:
-        response = requests.get(url)
-        if response.status_code == 200:
+        # Ensure base_url ends with '/docs'
+        if not base_url.endswith('/docs'):
+            base_url = urljoin(base_url, '/docs')
+
+        visited = set()  # Keep track of visited URLs to avoid infinite loops
+        to_visit = {base_url}  # Start with the base URL
+        all_links = set()  # Store all unique links found
+
+        while to_visit:
+            current_url = to_visit.pop()
+            if current_url in visited:
+                continue
+            visited.add(current_url)
+
+            response = requests.get(current_url)
+            if response.status_code != 200:
+                continue  # Skip URLs that are not successfully fetched
+
             soup = BeautifulSoup(response.content, 'html.parser')
-            links = set()
             for link in soup.find_all('a', href=True):
                 href = link['href']
-                # Create an absolute URL and add to the set
-                absolute_url = urljoin(url, href)
-                links.add(absolute_url)
-            return list(links)
+                absolute_url = urljoin(current_url, href)
+                if absolute_url.startswith(base_url) and absolute_url not in visited:
+                    to_visit.add(absolute_url)  # Add internal links to to_visit
+                all_links.add(absolute_url)  # Add all links to all_links
+
+        return list(all_links)
     except Exception as e:
-        print(f"Error fetching all links from {url}: {e}")
+        print(f"Error fetching all links from {base_url}: {e}")
         return []
