@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  title: LangchainDocsFetcher API
+  description: API for fetching Langchain documentation and navigating the site map.
+  version: "1.0"
+servers:
+  - url: http://localhost:5000
+    description: Development server
+paths:
+  /api/v1/fetch_docs:
+    get:
+      summary: Fetch a specific document
+      operationId: fetchDocs
+      parameters:
+        - name: document_id
+          in: query
+          required: true
+          description: The ID of the document to fetch
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: The content of the document
+        '404':
+          description: Document not found
+  /api/v1/get_sitemap:
+    get:
+      summary: Get the site map
+      operationId: getSitemap
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sitemap:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          description: The URL of the documentation page
+                        title:
+                          type: string
+                          description: The title of the documentation page
+                    description: A list of available documentation endpoints with titles
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+security:
+  - ApiKeyAuth: []
